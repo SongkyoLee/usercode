@@ -53,7 +53,7 @@ void draw_TH2D_all()
   TCanvas *c1 = new TCanvas("c1", "canvas", 800, 600);
   c1 -> cd();
  
-  TH2D *h1 = new TH2D("h1", "", 50, -2.5, 2.5, 11, 0., 11.);
+  TH2D *h1 = new TH2D("h1", "# of valid muon hits vs eta", 50, -2.5, 2.5, 11, 0., 11.);
   tree -> Project("h1", "Glb_nValMuHits:Glb_eta","");
   h1 -> GetXaxis() -> SetTitle("Glb_eta");
   h1 -> GetYaxis() -> SetTitle("Glb_nValMuHits");
@@ -62,28 +62,28 @@ void draw_TH2D_all()
   c1->SaveAs("TH2D_Glb_nValMuHits_vs_Glb_eta.pdf");
   delete h1;
 
-  TH2D *h2 = new TH2D("h2", "", 50, -3.4, 3.4, 31, 0, 31);
+  TH2D *h2 = new TH2D("h2", "# of valid tracker hits ve phi", 50, -3.4, 3.4, 31, 0, 31);
   tree -> Project("h2", "Glb_nValTrkHits:Glb_phi","");
-  h2 -> GetXaxis() -> SetTitle("Glb_phi");
+  h2 -> GetXaxis() -> SetTitle("Glb_phi [rad]");
   h2 -> GetYaxis() -> SetTitle("Glb_nValTrkHits");
   h2 -> Draw("colz");
   c1->Update();
   c1->SaveAs("TH2D_Glb_nValTrkHits_vs_Glb_phi.pdf");
   delete h2;
 
-  TH2D *h3 = new TH2D("h3", "", 50, 0., 15., 5, 0, 5);
+  TH2D *h3 = new TH2D("h3", "pixel layer with measurement vs pT", 50, 0., 15., 5, 0, 5);
   tree -> Project("h3", "Glb_pixLayerWMeas:Glb_pt","");
-  h3 -> GetXaxis() -> SetTitle("Glb_pt");
+  h3 -> GetXaxis() -> SetTitle("Glb_pt [GeV/c]");
   h3 -> GetYaxis() -> SetTitle("Glb_pixLayerWMeas");
   h3 -> Draw("colz");
   c1->Update();
   c1->SaveAs("TH2D_Glb_pixLayerWMeas_vs_Glb_pt.pdf");
   delete h3;
 
-  TH2D *h4 = new TH2D("h4", "", 50, -2.5, 2.5, 50, 0, 14);
+  TH2D *h4 = new TH2D("h4", "pT vs eta", 50, -2.5, 2.5, 50, 0, 14);
   tree -> Project("h4", "Glb_pt:Glb_eta","");
   h4 -> GetXaxis() -> SetTitle("Glb_eta");
-  h4 -> GetYaxis() -> SetTitle("Glb_pt");
+  h4 -> GetYaxis() -> SetTitle("Glb_pt [GeV/c]");
   h4 -> Draw("colz");
   c1->Update();
   c1->SaveAs("TH2D_Glb_pt_vs_Glb_eta.pdf");
