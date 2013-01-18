@@ -67,13 +67,13 @@ void printEff(TTree* HltTree,const char *cut,const char *title, char *projectTit
   TString str;    //Should not erase this line to prevent Form() breaks down!
 
   // calculate the efficiency //
-  effs.push_back(calcEff(HltTree,"All",nEvt,Form("(%s)&&1==1",cut)));
+  effs.push_back(calcEff(HltTree,"OR of all triggers",nEvt,Form("(%s)&&1==1",cut)));
   if (anaMode=="L1MB") {
     // BSC Coinc
     effs.push_back(calcEff(HltTree,"L1_BscMinBiasThreshold1_5bx",nEvt,Form("(%s)&&L1_BscMinBiasThreshold1",cut)));
     effs.push_back(calcEff(HltTree,"L1_BscMinBiasThreshold1_BptxAND",nEvt,Form("(%s)&&L1_BscMinBiasThreshold1_BptxAND",cut)));
     // HF Coinc
-    effs.push_back(calcEff(HltTree,"L1_HcalHfCoincidencePm_BptxAND",nEvt,Form("(%s)&&L1_HcalHfCoincidencePm_BptxAND",cut)));
+    effs.push_back(calcEff(HltTree,"L1_HcalHfCoincidencePm_BptxAND",nEvt,Form("(%s)&&L1_HcalHfCoincidencePm_BptxAND",cu)));
     // ZDC
     effs.push_back(calcEff(HltTree,"L1_ZdcCaloPlus_ZdcCaloMinus",nEvt,Form("(%s)&&L1_ZdcCaloPlus_ZdcCaloMinus",cut)));
     // High mul
@@ -108,8 +108,20 @@ void printEff(TTree* HltTree,const char *cut,const char *title, char *projectTit
     effs.push_back(calcEff(HltTree,"HLT_HLT_PAL1SingleMu12_v1",nEvt,Form("(%s)&&HLT_PAL1SingleMu12_v1",cut)));
     effs.push_back(calcEff(HltTree,"HLT_PAL1DoubleMu0_v1",nEvt,Form("(%s)&&HLT_PAL1DoubleMu0_v1",cut)));
     effs.push_back(calcEff(HltTree,"HLT_PADimuon0_NoVertexing_v1",nEvt,Form("(%s)&&HLT_PADimuon0_NoVertexing_v1",cut)));
-    effs.push_back(calcEff(HltTree,"HLT_HLT_PAMu5_v1",nEvt,Form("(%s)&&HLT_PAMu5_v1",cut)));
-    effs.push_back(calcEff(HltTree,"HLT_HLT_PAMu8_v1",nEvt,Form("(%s)&&HLT_PAMu8_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu5_v1",nEvt,Form("(%s)&&HLT_PAMu5_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu8_v1",nEvt,Form("(%s)&&HLT_PAMu8_v1",cut)));
+  }
+  if (anaMode=="HLTPA"){
+    effs.push_back(calcEff(HltTree,"HLT_PAMu3_v1",nEvt,Form("(%s)&&HLT_PAMu3_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu7_v1",nEvt,Form("(%s)&&HLT_PAMu7_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu12_v1",nEvt,Form("(%s)&&HLT_PAMu12_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAL1DoubleMuOpen_v1",nEvt,Form("(%s)&&HLT_PAL1DoubleMuOpen_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAL1DoubleMu0_HighQ_v1",nEvt,Form("(%s)&&HLT_PAL1DoubleMu0_HighQ_v1",cut))); 
+    effs.push_back(calcEff(HltTree,"HLT_PAL2DoubleMu3_v1",nEvt,Form("(%s)&&HLT_PAL2DoubleMu3_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu3PFJet20_v1",nEvt,Form("(%s)&&HLT_PAMu3PFJet20_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu3PFJet40_v1",nEvt,Form("(%s)&&HLT_PAMu3PFJet40_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PAMu7PFJet20_v1",nEvt,Form("(%s)&&HLT_PAMu7PFJet20_v1",cut)));
+    effs.push_back(calcEff(HltTree,"HLT_PABTagMu_Jet20_Mu4_v1",nEvt,Form("(%s)&&HLT_PABTagMu_Jet20_Mu4_v1",cut)));
   }
   results->push_back(effs);
 
@@ -119,11 +131,11 @@ void printEff(TTree* HltTree,const char *cut,const char *title, char *projectTit
   TH2D *hct = new TH2D(Form("h%s_ct",title),"",tsize,0,tsize,tsize,0,tsize);
 
   for (int i=tsize-1;i>=0;i--){
-    int nEvtAfterCut = HltTree->GetEntries((*triggerCuts)[i].c_str());
-    h->GetXaxis()->SetBinLabel(i+1,(*triggers)[i].c_str());
-    h->GetYaxis()->SetBinLabel(i+1,(*triggers)[i].c_str());
-    hct->GetXaxis()->SetBinLabel(i+1,(*triggers)[i].c_str());
-    hct->GetYaxis()->SetBinLabel(i+1,(*triggers)[i].c_str());
+    int nEvtAfterCut = HltTree->GetEntries(((*triggerCuts)[i]).c_str());
+    h->GetXaxis()->SetBinLabel(i+1,((*triggers)[i]).c_str());
+    h->GetYaxis()->SetBinLabel(i+1,((*triggers)[i]).c_str());
+    hct->GetXaxis()->SetBinLabel(i+1,((*triggers)[i]).c_str());
+    hct->GetYaxis()->SetBinLabel(i+1,((*triggers)[i]).c_str());
     for (int j=0;j<tsize;j++){
       string cut_ ="("+(*triggerCuts)[i]+")&&("+(*triggerCuts)[j]+")";
       double* eff = calcEff(HltTree,"",nEvtAfterCut,cut_.c_str(),0);
@@ -159,7 +171,7 @@ void printEff(TTree* HltTree,const char *cut,const char *title, char *projectTit
   palette->SetLabelColor(1);
   palette->SetLabelFont(42);
   palette->SetLabelOffset(0.005);
-  palette->SetLabelSize(0.045);
+  palette->SetLabelSize(0.035);
   palette->SetTitleOffset(1);
   palette->SetTitleSize(0.04);
   palette->SetFillColor(100);
@@ -168,17 +180,18 @@ void printEff(TTree* HltTree,const char *cut,const char *title, char *projectTit
   h->Draw("col text z");
 
   string fname(Form("%s/trigCorr_%s_%s.pdf",goutdir.Data(),projectTitle,title));
-  c1->SaveAs(fname.c_str());
-  c1->SaveAs(Form("%s/trigCorr_%s_%s.C",goutdir.Data(),projectTitle,title));
+  // c1->SaveAs(fname.c_str());
+  c1->SaveAs(Form("correlOut/trigCorr_210354.pdf"));
 
 //  cout <<"<img src=\"%ATTACHURLPATH%/"<<fname<<"\" alt=\""<<fname<<"\" width='671'   height='478' />"<<endl;   
 }
 
 void trigAnaCorrelation(
-    TString mode="HLTMu",
-    Int_t runNum = 202792,
+    TString mode="HLTPA",
+    Int_t runNum = 210354,
     Int_t goodLumiStart = 1,
-    TString inFile0Name = "root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged_HiForest/pPb_hiForest2_1_15_test.root",
+    //store/caf/user/velicanu/PA2013_merged_HiForest/pPb_hiForest2_1_15_test.root
+    TString inFile0Name = "root://eoscms//eos/cms/store/caf/user/yjlee/pPb2013/dst/pPb_openHLT_Run210354_veryRAW_43k.root",
     //TString inFile0Name = "/castor/cern.ch/user/k/kimy/openHLT//openhlt_run181531.root",
     //"/castor/cern.ch/user/m/miheejo/openHLT/cms442/r181530_reco_v1_2/HIExpressPhysics_hiexp-hirun2011-r181530-reco-v1_2.root",
 //"/castor/cern.ch/user/v/velicanu/HIHLT_Validation_Test_GRIF_v10.root",
@@ -186,7 +199,7 @@ void trigAnaCorrelation(
     char *projectTitle = "HIpARun2013",
     string source="data")
 {
-  gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/JpsiStyle.C");
+  //  gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/JpsiStyle.C");
   // Load input
   TChain * HltTree = new TChain("hltanalysis/HltTree","HI OpenHLT Tree");
   HltTree->Add(inFile0Name);
@@ -199,10 +212,12 @@ void trigAnaCorrelation(
   anaMode=mode;
 
   // Define Output
-  TString evtSel("HLT_PAMinBiasHfOrBSC_v1");
+  // TString evtSel("1"); 
+ TString evtSel("HLT_PAMu3_v1||HLT_PAMu7_v1||HLT_PAMu12_v1||HLT_PAL1DoubleMu0_HighQ_v1||HLT_PAL1DoubleMuOpen_v1||HLT_PAL2DoubleMu3_v1||HLT_PABTagMu_Jet20_Mu4_v1||HLT_PAMu3PFJet20_v1||HLT_PAMu3PFJet40_v1||HLT_PAMu7PFJet20_v1");
+//  TString evtSel("HLT_PAMinBiasHfOrBSC_v1");
 //  TString evtSel("HLT_HIMinBiasHfOrBSC_v1");
 //  TString evtSel("L1Tech_BPTX_plus_AND_minus.v0_5bx");
-  outdir+=Form("/run%d_%s_%s",runNum,anaMode.Data(),evtSel.Data());
+  outdir+=Form("/run%d_%s_%s",runNum,anaMode.Data(),"17012013");
   gSystem->mkdir(outdir.Data(),kTRUE);
   goutdir=outdir;
   TFile *outf = new TFile(Form("%s_%s_hist.root",outdir.Data(),projectTitle),"RECREATE");
@@ -244,11 +259,11 @@ void trigAnaCorrelation(
   }
   cout <<" | " <<endl;
 
-  for (int i=0;i<(int)triggers->size();i++){
-    cout <<" | " <<setw(20)<<(*triggers)[i];
+  for (int k=0;k<(int)triggers->size();k++){
+    cout <<" | " <<setw(20)<<(*triggers)[k];
     for (int j=0;j<(int)results->size();j++) {
-      double eff=(((*results)[j])[i])[0];
-      double effErr=(((*results)[j])[i])[1];
+      double eff=(((*results)[j])[k])[0];
+      double effErr=(((*results)[j])[k])[1];
       cout <<" | "<<setw(10)<<fixed<<setprecision(3)<<eff*100.<<"% +-";
       cout        <<setw(10)<<fixed<<setprecision(3)<<effErr*100.<<"% ";
     }
