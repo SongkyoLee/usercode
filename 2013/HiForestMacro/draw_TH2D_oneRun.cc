@@ -17,18 +17,21 @@ void draw_TH2D_oneRun()
   //Set style
   gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/JpsiStyle.C"); 
 
+  //Variables
+  Int_t Run, Event;
+
  //----- open the root file 
 
  // PilotRun (as a reference)
  TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r0_pilot_minbias_v0.root");
-	// Run210353 (date 180113) 
- //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/pPb_hiForest2_r210353_notracker_v1.root");
+ // Run210353 (date 180113) 
+ //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210498_firstlook_stablebeam.root");
 
   TTree *tree = (TTree *) openFile -> Get("muonTree/HLTMuTree");
-/*
   tree -> SetBranchAddress("Run",&Run);
   tree -> SetBranchAddress("Event",&Event);
-*/
+	tree->GetEntry(0);
+  cout<< "Run = " <<Run << endl;
 
  //draw histograms
   TCanvas *c1 = new TCanvas("c1", "canvas", 800, 600);
@@ -45,11 +48,11 @@ void draw_TH2D_oneRun()
   TH2D *h9 = new TH2D("h9", "Glb_pixLayerWMeas vs Glb_phi;Global muon #phi;Pixel layer with measurement", 50, -3.4, 3.4, 5, 0., 5.);
   TH2D *h10 = new TH2D("h10", "Glb_pt vs Glb_eta;Global muon #eta;Global muon p_{T}", 50, -2.5, 2.5, 50, 0., 20.);
   TH2D *h11 = new TH2D("h11", "Glb_phi vs Glb_eta;Global muon #eta;Global muon #phi", 50, -2.5, 2.5, 50, -3.4, 3.4);
-  TH2D *h12 = new TH2D("h12", "Sta_pt vs Sta_eta;Standalone muon #eta;Standalone muon p_{T}", 50, -2.5, 2.5, 50, 0., 40.); 
-  TH2D *h13 = new TH2D("h13", "Sta_phi vs Sta_eta;Stanalone muon #eta;Standalone muon #phi", 50, -2.5, 2.5, 50, -3.4, 3.4);
+  TH2D *h12 = new TH2D("h12", "Sta_pt vs Sta_eta;Standalone muon #eta;Standalone muon p_{T}", 50, -2.5, 2.5, 50, 0., 50.); 
+  TH2D *h13 = new TH2D("h13", "Sta_phi vs Sta_eta;Standalone muon #eta;Standalone muon #phi", 50, -2.5, 2.5, 50, -3.4, 3.4);
 /*
   // count HLTMuTree entries 
-  Float_t NumTreeEntries = tree -> GetEntries();
+  Int_t NumTreeEntries = tree -> GetEntries();
 	cout << "Tree Entries = " << NumTreeEntries << endl;
 */
 	tree->Draw("Glb_nValMuHits:Glb_pt>>h1","","colz"); //Glb_nptl>0
