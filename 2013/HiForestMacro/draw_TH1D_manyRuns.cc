@@ -22,17 +22,18 @@ void draw_TH1D_manyRuns()
 
   //----- open the root file ------
   // 1.open reference file (created from pilot run 202792)
-
+  //root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r0_pilot_minbias_v0.root"
   TFile *refFile = new TFile("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/stableBeam/pilotRun/TH1D/TH1D_run202792.root","READ");
   // 2.open run root file 
-  Int_t nRun = 1; //num of run root files
+  Int_t nRun = 2; //num of run root files
   TFile *openFile[nRun];
-	openFile[0] = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/pPb_hiForest2_r210353_notracker_v1.root");
 	openFile[0] = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210498_stablebeams.root");
+	openFile[1] = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
+
 
   //draw histograms
 	string histName[] ={"Glb_pt","Glb_eta","Glb_phi","Glb_dxy","Glb_dz","Glb_nValMuHits", "Glb_nValTrkHits", "Glb_nTrkFound", "Glb_pixLayerWMeas", "Glb_glbChi2_ndof", "Glb_trkChi2_ndof", "Di_vProb", "Sta_pt", "Sta_eta", "Sta_phi", "Sta_dxy", "Sta_dz"};
-	string histTitle[] = {"Glb_pt;Global muon p_{T};Counts (normalized by # of entries)", "Glb_eta;Global muon #eta;Counts (normalized by # of entries)", "Glb_phi;Global muon #phi;Counts (normalized by # of entries)", "Glb_dxy;Global muon dxy;Counts (normalized by # of entries)", "Glb_dz;Global muon dz;Counts (normalized by # of entries)", "Glb_nValMuHits;# of valid muon hits;Counts (normalized by # of entries)", "Glb_nValTrkHits;# of valid tracker hits;Counts (normalized by # of entries)", "Glb_nTrkFound;# of tracks found;Counts (normalized by # of entries)", "Glb_pixLayerWMeas;Pixel layer with measurement;Counts (normalized by # of entries)", "Glb_glbChi2_ndof;Global muon chi2/ndof;Counts (normalized by # of entries)", "Glb_trkChi2_ndof;Tracker muon chi2/ndof;Counts (normalized by # of entries)", "Di_vProb;Dimuon's vertex probability;Counts (normalized by # of entries)", "Sta_pt;Standalone muon p_{T};Counts (normalized by # of entries)", "Sta_eta;Standalone muon #eta;Counts (normalized by # of entries)", "Sta_phi;Standalone muon #phi;Counts (normalized by # of entries)", "Sta_dxy;Standalone muon dxy;Counts (normalized by # of entries)", "Sta_dz;Standalone muon dz;Counts (normalized by # of entries)"}; 
+	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts (normalized by # of entries)", "Glb_eta;Global muon #eta;Counts (normalized by # of entries)", "Glb_phi;Global muon #phi [GeV/c];Counts (normalized by # of entries)", "Glb_dxy;Global muon dxy [cm];Counts (normalized by # of entries)", "Glb_dz;Global muon dz [cm];Counts (normalized by # of entries)", "Glb_nValMuHits;# of valid muon hits;Counts (normalized by # of entries)", "Glb_nValTrkHits;# of valid tracker hits;Counts (normalized by # of entries)", "Glb_nTrkFound;# of tracks found;Counts (normalized by # of entries)", "Glb_pixLayerWMeas;Pixel layer with measurement;Counts (normalized by # of entries)", "Glb_glbChi2_ndof;Global muon chi2/ndof;Counts (normalized by # of entries)", "Glb_trkChi2_ndof;Tracker muon chi2/ndof;Counts (normalized by # of entries)", "Di_vProb;Dimuon's vertex probability;Counts (normalized by # of entries)", "Sta_pt;Standalone muon p_{T} [GeV/c];Counts (normalized by # of entries)", "Sta_eta;Standalone muon #eta;Counts (normalized by # of entries)", "Sta_phi;Standalone muon #phi [rad];Counts (normalized by # of entries)", "Sta_dxy;Standalone muon dxy [cm];Counts (normalized by # of entries)", "Sta_dz;Standalone muon dz [cm];Counts (normalized by # of entries)"}; 
 	int nbins[] ={50, 50, 50, 50, 50, 55, 31, 31, 6, 50, 50, 50, 50, 50, 50, 50, 50};
 	double xmin[] ={0., -2.5, -3.4, -15.0, -80., 0., 0., 0., 0., 0., 0., 0., 0., -2.5,-3.4, -10., -400. };
 	double xmax[] ={20., 2.5, 3.4, 15.0, 80., 50., 31., 31., 6., 5., 3., 1., 50., 2.5, 3.4, 10., 400. };
@@ -49,7 +50,6 @@ void draw_TH1D_manyRuns()
   Int_t histEntries[nRun][nHist];
 	Double_t histMin[nHist];
 	Double_t histMax[nHist];
-	//Int_t LineCol[nRun];
 	stringstream hist1Dname[nRun][nHist];
 
 for (Int_t k=0; k<nRun; k++)
@@ -62,40 +62,36 @@ for (Int_t k=0; k<nRun; k++)
 
 	for (Int_t i=0; i<nHist; i++) {
 	  histRef[i] = (TH1D*)refFile-> Get(histName[i].c_str());
-		//histRef[i]->SetMarkerSize(1.2); //temporary
-		//histRef[i]->SetLineWidth(2.0);
+		//histRef[i]->Sumw2();
+		SetHistStyle(histRef[i],0);
 		hist1Dname[k][i] << k << "_" << histName[i].c_str() ;
 	  //cout << k <<" : "<< histName[i].c_str()<<" : "<<hist1Dname[k][i].str().c_str() << endl;
 		hist1D[k][i] = new TH1D(hist1Dname[k][i].str().c_str(),histTitle[i].c_str(),nbins[i],xmin[i],xmax[i]);
-		SetHistStyle(hist1D[k][i],k);
-		if(k>=5) { SetHistStyle(hist1D[k][i],k-5); }
+		hist1D[k][i]->Sumw2();
+		SetHistStyle(hist1D[k][i],k+1);
+		//if(k>=5) { SetHistStyle(hist1D[k][i],k-5); }
 
 	}
 }
 
-TLegend *leg = new TLegend(0.69,0.74,0.88,0.88);
-//TLegend *leg = new TLegend(0.16,0.64,0.58,0.88);
+TLegend *leg = new TLegend(0.57,0.65,0.92,0.90);
 SetLegendStyle(leg);
-//TLegend *leg_do_rap = new TLegend(0.35,0.64,0.8,0.88);
-//SetLegendStyle(leg_do_rap);
+TLegend *leg_left = new TLegend(0.18, 0.65 ,0.53, 0.90);
+SetLegendStyle(leg_left);
+TLegend *leg_middle = new TLegend(0.57, 0.40 ,0.92, 0.65);
+SetLegendStyle(leg_middle);
 
 	leg->AddEntry(histRef[0],"pilotRun","lp");
-	for (Int_t k; k<nRun; k++) {
-	leg->AddEntry(hist1D[k][0],Form("Run%d",RunNum[nRun-1]),"lp");
+	leg_left->AddEntry(histRef[0],"pilotRun","lp");
+	leg_middle->AddEntry(histRef[0],"pilotRun","lp");
+	for (Int_t k=0; k<nRun; k++) {
+		leg->AddEntry(hist1D[k][0],Form("Run%d",RunNum[k]),"lp");
+		leg_left->AddEntry(hist1D[k][0],Form("Run%d",RunNum[k]),"lp");
+		leg_middle->AddEntry(hist1D[k][0],Form("Run%d",RunNum[k]),"lp");
   }
 
   TCanvas c1;
 	c1.cd(); 
-/*
- for(Int_t k=0; k<nRun; k++)
- {
-	 for(Int_t i=0; i<nHist; i++)
-	 {
-		 hist1D[k][i]->SetLineColor(k+2); 
-		 hist1D[k][i]->SetMarkerColor(k+2); 
-   }
- }
- */	
 
   //Glb_pt
   histRef[0]->Draw("pe");
@@ -105,13 +101,13 @@ SetLegendStyle(leg);
 	if (histRef[0]->GetMinimum() == 0)	{	histRef[0]->SetMinimum(0.001); }
 	else { histRef[0]->SetMinimum(histMin[0]*0.01);}
 	histRef[0]->SetMaximum(histMax[0]*1);
+//	histRef[0]->SetMaximum(histMax[0]*10);
   gPad->SetLogy(1);
   for(Int_t k=0; k<nRun; k++)
 	{
 		char temp0_1[531];
 		sprintf(temp0_1,"%s>>%s",histName[0].c_str(),hist1Dname[k][0].str().c_str());
 		tree[k]->Draw(temp0_1,"Glb_nptl>0","pe same");
-	//  leg_do_rap->AddEntry(hist1D[k][0],Form("Run%d",RunNum),"l");
 		histEntries[k][0]=hist1D[k][0]->GetEntries();
 	  hist1D[k][0]->Scale(1./histEntries[k][0]);
   }
@@ -147,7 +143,8 @@ SetLegendStyle(leg);
   histMax[2]=histRef[2]->GetMaximum();
 	if (histRef[2]->GetMinimum() == 0)	{	histRef[2]->SetMinimum(0.001); }
 	else { histRef[2]->SetMinimum(histMin[2]*0.01) ;}
-	histRef[2]->SetMaximum(histMax[2]*1.2);
+	histRef[2]->SetMaximum(histMax[2]*1.8);
+//	histRef[2]->SetMaximum(histMax[2]*1.2);
     gPad->SetLogy(0);
   for(Int_t k=0; k<nRun; k++)
 	{
@@ -210,7 +207,7 @@ SetLegendStyle(leg);
   histMax[5]=histRef[5]->GetMaximum();
 	if (histRef[5]->GetMinimum() == 0)	{	histRef[5]->SetMinimum(0.001); }
 	else { histRef[5]->SetMinimum(histMin[5]*0.01) ;}
-	histRef[5]->SetMaximum(histMax[5]*1.2);
+ 	histRef[5]->SetMaximum(histMax[5]*1.2);
     gPad->SetLogy(0);
   for(Int_t k=0; k<nRun; k++)
 	{
@@ -226,7 +223,7 @@ SetLegendStyle(leg);
 
 //Glb_nValTrkHits;
   histRef[6]->Draw("pe");
-	leg->Draw();
+	leg_left->Draw();
   histMin[6]=histRef[6]->GetMinimum();
   histMax[6]=histRef[6]->GetMaximum();
 	if (histRef[6]->GetMinimum() == 0)	{	histRef[6]->SetMinimum(0.001); }
@@ -247,7 +244,7 @@ SetLegendStyle(leg);
 
 //Glb_nTrkFound
   histRef[7]->Draw("pe");
-	leg->Draw();
+	leg_left->Draw();
   histMin[7]=histRef[7]->GetMinimum();
   histMax[7]=histRef[7]->GetMaximum();
 	if (histRef[7]->GetMinimum() == 0)	{	histRef[7]->SetMinimum(0.001); }
@@ -268,7 +265,7 @@ SetLegendStyle(leg);
 
 //Glb_pixLayerWMeas;
   histRef[8]->Draw("pe");
-	leg->Draw();
+	leg_left->Draw();
   histMin[8]=histRef[8]->GetMinimum();
   histMax[8]=histRef[8]->GetMaximum();
 	if (histRef[8]->GetMinimum() == 0)	{	histRef[8]->SetMinimum(0.001); }
@@ -400,7 +397,8 @@ SetLegendStyle(leg);
   histMax[14]=histRef[14]->GetMaximum();
 	if (histRef[14]->GetMinimum() == 0)	{	histRef[14]->SetMinimum(0.001); }
 	else { histRef[14]->SetMinimum(histMin[14]*0.01) ;}
-	histRef[14]->SetMaximum(histMax[14]*1.2);
+	histRef[14]->SetMaximum(histMax[14]*1.8);
+//	histRef[14]->SetMaximum(histMax[14]*1.2);
   gPad->SetLogy(0);
   for(Int_t k=0; k<nRun; k++)
 	{
@@ -416,7 +414,7 @@ SetLegendStyle(leg);
 
  //Sta_dxy
   histRef[15]->Draw("pe");
-	leg->Draw();
+	leg_middle->Draw();
   histMin[15]=histRef[15]->GetMinimum();
   histMax[15]=histRef[15]->GetMaximum();
 	if (histRef[15]->GetMinimum() == 0)	{	histRef[15]->SetMinimum(0.001); }
@@ -437,7 +435,7 @@ SetLegendStyle(leg);
 
   //Sta_dz
   histRef[16]->Draw("pe");
-	leg->Draw();
+	leg_middle->Draw();
   histMin[16]=histRef[16]->GetMinimum();
   histMax[16]=histRef[16]->GetMaximum();
 	if (histRef[16]->GetMinimum() == 0)	{	histRef[16]->SetMinimum(0.001); }
@@ -463,27 +461,26 @@ SetLegendStyle(leg);
 void SetHistStyle(TH1* h, int i) {
 	//  int colorArr[6] = {kBlack, kBlue, kRed, kGreen+2, kOrange, kMagenta+2};
 	//  int colorArr[] = {kGray+2, kBlack, kRed, kRed+2, kOrange+1, kOrange+8, kGreen+2, kGreen+4, kAzure+1, kAzure+3, kViolet+5, kViolet+3, kMagenta, kMagenta+2};
-int colorArr[] = {kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
 int markerFullArr[6] = {kFullCircle, kFullSquare, kFullTriangleUp, kFullTriangleDown, kFullStar, kFullDiamond};
 int markerOpenArr[6] = {kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenTriangleDown, kOpenStar, kOpenDiamond};
 				  
 h->SetLineColor(colorArr[i]);
 //h->SetLineWidth(2.4);
 h->SetMarkerColor(colorArr[i]);
-//h->SetMarkerStyle(kOpenCircle);
-  if (i < 10)  h->SetMarkerStyle(markerFullArr[i]);
-  else h->SetMarkerStyle(markerOpenArr[i-10]);
-//h->SetMarkerSize(1.5);
+h->SetMarkerStyle(kFullCircle);
+  //if (i < 10)  h->SetMarkerStyle(markerFullArr[i]);
+  //else h->SetMarkerStyle(markerOpenArr[i-10]);
+	h->SetMarkerSize(1.2);
 
 return;
 }
 
 void SetLegendStyle(TLegend* l) {
  	l->SetFillColor(0);
-	l->SetFillStyle(4100);
-//	l->SetFillStyle(4000); //transparent
+	l->SetFillStyle(4000); //transparent
 //	l->SetBorderSize(1);
 	l->SetBorderSize(0);
-	l->SetMargin(0.1);
+	l->SetMargin(0.2);
 }
 
