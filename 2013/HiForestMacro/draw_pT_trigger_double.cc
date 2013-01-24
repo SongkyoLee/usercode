@@ -15,7 +15,7 @@ using namespace std;
 void SetHistStyle(TH1* h, int i) ;
 void SetLegendStyle(TLegend* l);
 
-void draw_pT_trigger()
+void draw_pT_trigger_double()
 {
   //Set style
   gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/styleTH1D.C"); 
@@ -27,14 +27,15 @@ void draw_pT_trigger()
   //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210498_stablebeams.root");
 	//TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
   //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210614_autoforest.root"); 
-  TFile * openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210634_autoforest_v2.root"); 
+  TFile * openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210638_autoforest_v2.root"); 
 
   //draw histograms
-	string histName[] ={"All_Global_muons","HLT_PAL1DoubleMuOpen_v1", "HLT_PAL1DoubleMu0_HighQ_v1", "HLT_PAL2DoubleMu3_v1", "HLT_PAMu3_v1", "HLT_PAMu7_v1", "HLT_PAMu12_v1", "HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1"};
-	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts" };
-	int nbins[] ={60, 60, 60, 60, 60, 60, 60, 60};
-	double xmin[] ={0., 0., 0., 0., 0., 0., 0. ,0. };
-	double xmax[] ={30., 30., 30., 30., 30., 30., 30.,30. };
+//	string histName[] ={"All_Global_muons","HLT_PAL1DoubleMuOpen_v1", "HLT_PAL1DoubleMu0_HighQ_v1", "HLT_PAL2DoubleMu3_v1", "HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1"};
+	string histName[] ={"All_Global_muons","L1DoubleMuOpen_v1", "L1DoubleMu0_HighQ_v1", "L2DoubleMu3_v1", "PxlTrkMulti100_L2DoubleMu3_v1"};
+	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts"};
+	int nbins[] ={60, 60, 60, 60, 60};
+	double xmin[] ={0., 0., 0., 0., 0.};
+	double xmax[] ={30., 30., 30., 30., 30.};
 
 	const int nHist = sizeof(histName)/sizeof(string);
   cout<< "nHist = " << nHist << endl;
@@ -59,7 +60,7 @@ void draw_pT_trigger()
 	temptree->SetBranchAddress("Run", &Run);
 	temptree->GetEntry(0);
 
-	TLegend *leg = new TLegend(0.49,0.55,0.93,0.91);
+	TLegend *leg = new TLegend(0.40,0.55,0.93,0.91);
 	SetLegendStyle(leg);
 
 	for (Int_t i=0; i<nHist; i++)
@@ -67,11 +68,11 @@ void draw_pT_trigger()
 		leg->AddEntry(hist1D[i],histName[i].c_str(),"lp");
   }
 
-  TCanvas c1;
-	c1.cd(); 
+  TCanvas* c1 = new TCanvas();
+	c1->cd(); 
 
   tree->Draw("HLTMuTree.Glb_pt>>All_Global_muons","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0","e");
-	//leg->Draw();
+//	leg->Draw();
 	//hist1D[0]->SetTitle("pilot Run");
 	hist1D[0]->SetTitle(Form("Run%d",Run));
 	gPad->SetLogy(1);
@@ -82,15 +83,15 @@ void draw_pT_trigger()
 	//hist1D[0]->SetMaximum(histMax[0]*1);
 	hist1D[0]->SetMaximum(histMax[0]*10);
 
-  tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL1DoubleMuOpen_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMuOpen_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL1DoubleMu0_HighQ_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMu0_HighQ_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL2DoubleMu3_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu3_v1==1 ","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu7_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu7_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu12_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu12_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1==1","pe same");
+  tree->Draw("HLTMuTree.Glb_pt>>L1DoubleMuOpen_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMuOpen_v1==1","pe same");
+	tree->Draw("HLTMuTree.Glb_pt>>L1DoubleMu0_HighQ_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMu0_HighQ_v1==1","pe same");
+	tree->Draw("HLTMuTree.Glb_pt>>L2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL2DoubleMu3_v1==1","pe same");
+	//tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu3_v1==1 ","pe same");
+	//tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu7_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu7_v1==1","pe same");
+	//tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu12_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu12_v1==1","pe same");
+	tree->Draw("HLTMuTree.Glb_pt>>PxlTrkMulti100_L2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1==1","pe same");
 
-	c1.SaveAs(Form("trig_run%d.pdf",Run));
+	c1->SaveAs(Form("trig_double_run%d.pdf",Run));
 
 	return;
 
@@ -99,7 +100,8 @@ void draw_pT_trigger()
 void SetHistStyle(TH1* h, int i) {
 	//  int colorArr[6] = {kBlack, kBlue, kRed, kGreen+2, kOrange, kMagenta+2};
 	//  int colorArr[] = {kGray+2, kBlack, kRed, kRed+2, kOrange+1, kOrange+8, kGreen+2, kGreen+4, kAzure+1, kAzure+3, kViolet+5, kViolet+3, kMagenta, kMagenta+2};
-int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+//int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+int colorArr[] = { kBlack, kGreen+2, kAzure+1, kViolet+5, kMagenta};
 int markerFullArr[6] = {kFullCircle, kFullSquare, kFullTriangleUp, kFullTriangleDown, kFullStar, kFullDiamond};
 int markerOpenArr[6] = {kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenTriangleDown, kOpenStar, kOpenDiamond};
 				  

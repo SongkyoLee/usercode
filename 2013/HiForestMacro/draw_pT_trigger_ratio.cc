@@ -7,6 +7,7 @@
 #include <TH1D.h>
 #include <TDirectory.h>
 #include <TLegend.h>
+#include <TGraph.h>
  
 #include <sstream>
 #include <string>
@@ -15,7 +16,7 @@ using namespace std;
 void SetHistStyle(TH1* h, int i) ;
 void SetLegendStyle(TLegend* l);
 
-void draw_pT_trigger()
+void draw_pT_trigger_ratio()
 {
   //Set style
   gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/styleTH1D.C"); 
@@ -30,76 +31,101 @@ void draw_pT_trigger()
   TFile * openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210634_autoforest_v2.root"); 
 
   //draw histograms
-	string histName[] ={"All_Global_muons","HLT_PAL1DoubleMuOpen_v1", "HLT_PAL1DoubleMu0_HighQ_v1", "HLT_PAL2DoubleMu3_v1", "HLT_PAMu3_v1", "HLT_PAMu7_v1", "HLT_PAMu12_v1", "HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1"};
-	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts" };
-	int nbins[] ={60, 60, 60, 60, 60, 60, 60, 60};
-	double xmin[] ={0., 0., 0., 0., 0., 0., 0. ,0. };
-	double xmax[] ={30., 30., 30., 30., 30., 30., 30.,30. };
+	string histName[] ={"All_Global_muons", "HLT_PAMu3_v1", "HLT_PAMu7_v1", "HLT_PAMu12_v1"};
+	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts"};
+	const int nbins = 60;
+	const double xmin = 0.;
+	const double xmax = 30.;
 
 	const int nHist = sizeof(histName)/sizeof(string);
   cout<< "nHist = " << nHist << endl;
 
 	TH1D *hist1D[nHist];	
-	Double_t histMin[nHist];
-	Double_t histMax[nHist];
-
 	for(Int_t i=0; i<nHist; i++)
 	{
-		hist1D[i] = new TH1D(histName[i].c_str(),histTitle[i].c_str(),nbins[i],xmin[i],xmax[i]);
-		SetHistStyle(hist1D[i],i);
+		hist1D[i] = new TH1D(histName[i].c_str(),histTitle[i].c_str(),60,0,30);
 		hist1D[i]->Sumw2();
 	}
 
-  Int_t Run;
+	//read the tree
   TTree *tree = new TTree();
 	tree->AddFriend("hltanalysis/HltTree",openFile);
 	tree->AddFriend("muonTree/HLTMuTree",openFile);
-	
+
+	//get the run number	
+  Int_t Run;
   TTree *temptree = (TTree *) openFile -> Get("muonTree/HLTMuTree");
 	temptree->SetBranchAddress("Run", &Run);
 	temptree->GetEntry(0);
 
-	TLegend *leg = new TLegend(0.49,0.55,0.93,0.91);
-	SetLegendStyle(leg);
 
-	for (Int_t i=0; i<nHist; i++)
-	{
-		leg->AddEntry(hist1D[i],histName[i].c_str(),"lp");
-  }
-
-  TCanvas c1;
-	c1.cd(); 
+  TCanvas *c1 =new TCanvas();
+	c1->cd(); 
 
   tree->Draw("HLTMuTree.Glb_pt>>All_Global_muons","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0","e");
-	//leg->Draw();
-	//hist1D[0]->SetTitle("pilot Run");
-	hist1D[0]->SetTitle(Form("Run%d",Run));
-	gPad->SetLogy(1);
-  histMin[0]=hist1D[0]->GetMinimum();
-  histMax[0]=hist1D[0]->GetMaximum();
-	if (hist1D[0]->GetMinimum() == 0)	{	hist1D[0]->SetMinimum(0.5); }
-	else { hist1D[0]->SetMinimum(histMin[0]*0.1);}
-	//hist1D[0]->SetMaximum(histMax[0]*1);
-	hist1D[0]->SetMaximum(histMax[0]*10);
-
-  tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL1DoubleMuOpen_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMuOpen_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL1DoubleMu0_HighQ_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL1DoubleMu0_HighQ_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAL2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAL2DoubleMu3_v1==1","pe same");
 	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu3_v1==1 ","pe same");
 	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu7_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu7_v1==1","pe same");
 	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAMu12_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAMu12_v1==1","pe same");
-	tree->Draw("HLTMuTree.Glb_pt>>HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1","HLTMuTree.Event==HltTree.Event && HLTMuTree.Glb_nptl>0 && HltTree.HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1==1","pe same");
 
-	c1.SaveAs(Form("trig_run%d.pdf",Run));
+ 	c1->Clear();
 
-	return;
+	// draw the ratio of triggers
+ string histRatioName[] ={"HLT_PA Mu3/Mu7", "HLT_PA Mu3/Mu12", "HLT_PA Mu7/Mu12"};
+ const int nHistRatio = sizeof(histRatioName)/sizeof(string);
+ cout << "nHistRatio = " << nHistRatio << endl; 
+  
+	TLegend *leg = new TLegend(0.45,0.65,0.93,0.91);
+	SetLegendStyle(leg);
+
+	TH1D* histRatio[nHistRatio];
+
+	for(Int_t i=0; i<nHistRatio; i++)
+	{
+  	histRatio[i] = new TH1D(histRatioName[i].c_str(),histTitle[i].c_str(),nbins,xmin,xmax);
+		SetHistStyle(histRatio[i],i);
+		histRatio[i]->Sumw2();
+		leg->AddEntry(histRatio[i],histRatioName[i].c_str(),"lp");
+	}
+
+  	histRatio[0]->Divide(hist1D[1],hist1D[2]);
+		histRatio[0]->Draw("e");
+		leg->Draw();
+		histRatio[0]->SetTitle(Form("Run%d",Run));
+		gPad->SetLogy(1);
+		histRatio[0]->SetMinimum(0.4);
+ 		histRatio[0]->SetMaximum(5000);
+
+  	histRatio[1]->Divide(hist1D[1],hist1D[3]);
+		histRatio[1]->Draw("e same");
+
+  	histRatio[2]->Divide(hist1D[2],hist1D[3]);
+		histRatio[2]->Draw("e same");
+
+		// draw the reference graph y=1
+		Double_t x[531];
+		Double_t y[531];
+		for(Int_t n=0; n<nbins; n++)
+		{
+			x[n]=xmin+1.2*n*((xmax-xmin)/nbins);
+			//x[n]=xmin+n*((xmax-xmin)/nbins);
+			y[n]=1;
+		}
+		
+		TGraph* gr_ref = new TGraph(nbins, x+1, y);
+	  gr_ref->SetLineColor(kRed);
+		gr_ref->Draw("L");
+	
+		c1->SaveAs(Form("trig_ratio_run%d.pdf",Run));
+		
+		return;
 
 }
 
 void SetHistStyle(TH1* h, int i) {
 	//  int colorArr[6] = {kBlack, kBlue, kRed, kGreen+2, kOrange, kMagenta+2};
 	//  int colorArr[] = {kGray+2, kBlack, kRed, kRed+2, kOrange+1, kOrange+8, kGreen+2, kGreen+4, kAzure+1, kAzure+3, kViolet+5, kViolet+3, kMagenta, kMagenta+2};
-int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+//int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+int colorArr[] = { kBlack, kOrange+1, kGreen+1, kBlue+2};
 int markerFullArr[6] = {kFullCircle, kFullSquare, kFullTriangleUp, kFullTriangleDown, kFullStar, kFullDiamond};
 int markerOpenArr[6] = {kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenTriangleDown, kOpenStar, kOpenDiamond};
 				  
@@ -120,7 +146,7 @@ void SetLegendStyle(TLegend* l) {
 //	l->SetFillStyle(4000); //transparent
 //	l->SetBorderSize(1);
 	l->SetBorderSize(0);
-	l->SetMargin(0.12);
-	l->SetTextSize(0.04);
+	l->SetMargin(0.11);
+	l->SetTextSize(0.05);
 }
 

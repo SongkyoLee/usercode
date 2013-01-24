@@ -22,11 +22,18 @@ void draw_TH2D_oneRun()
 
  //----- open the root file 
 
- // PilotRun (as a reference)
+ // -- PilotRun (as a reference)
+ //TFile *openFile = new TFile("/afs/cern.ch/work/k/kyolee/private/HiForestRootFiles/pPb_hiForest2_1_15_test.root");
  //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r0_pilot_minbias_v0.root");
- // Run210353 (date 180113) 
+ //  -- MC run1?
+ //TFile* openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/vzhukova/EPOS_RECO/epos_reco_fix_1000_1_Em3.root"); //this is RECO, not HiForest
+  TFile* openFile = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/azsigmon/HiForest_pPb_Epos_336800.root");
+ // -- Run210353 (date 180113) 
  //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210498_stablebeams.root");
- TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
+ //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
+ //TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
+  //TFile * openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210614_autoforest.root"); 
+ //TFile * openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210634_autoforest_v2.root"); 
 
   TTree *tree = (TTree *) openFile -> Get("muonTree/HLTMuTree");
   tree -> SetBranchAddress("Run",&Run);
@@ -35,8 +42,8 @@ void draw_TH2D_oneRun()
   cout<< "Run = " <<Run << endl;
 
  //draw histograms
-  //TCanvas *c1 = new TCanvas("c1", "canvas", 800, 600);
   TCanvas *c1 = new TCanvas("c1", "canvas", 600, 600);
+  //TCanvas *c1 = new TCanvas("c1", "canvas", 800, 600);
   c1 -> cd();
  
   TH2D *h1 = new TH2D("h1", "Glb_nValMuHits vs Glb_pt;Global muon p_{T} [GeV/c];# of valid muon hits", 50, 0., 20., 55, 0., 55.);
@@ -102,4 +109,7 @@ void draw_TH2D_oneRun()
   //delete openFile;
 	//exit(0);
   return;
+
 }
+
+

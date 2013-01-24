@@ -28,7 +28,7 @@ void draw_LEGEND_trigger()
 	//TFile *openFile = TFile::Open("root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r210534_stablebeams_72bunch.root");
 
   //draw histograms
-	string histName[] ={"All_Global_muons","HLT_PAL1DoubleMuOpen_v1", "HLT_PAL1DoubleMu0_HighQ_v1", "HLT_PAL2DoubleMu3_v1", "HLT_PAMu3_v1", "HLT_PAMu7_v1", "HLT_PAMu12_v1", "HLT_PAPixelTrackMultiplicity100_L2DoubleMu3_v1"};
+	string histName[] ={"All_Global_muons","HLT_PAL1DoubleMuOpen_v1", "HLT_PAL1DoubleMu0_HighQ_v1", "HLT_PAL2DoubleMu3_v1", "HLT_PAPxlTrkMulti100_L2DouMu3_v1", "HLT_PAMu3_v1", "HLT_PAMu7_v1", "HLT_PAMu12_v1" };
 	string histTitle[] = {"Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts", "Glb_pt;Global muon p_{T} [GeV/c];Counts" };
 	int nbins[] ={50, 50, 50, 50, 50, 50, 50, 50};
 	double xmin[] ={0., 0., 0., 0., 0., 0., 0. ,0. };
@@ -52,18 +52,19 @@ void draw_LEGEND_trigger()
 	//tree->AddFriend("hltanalysis/HltTree",openFile);
 	//tree->AddFriend("muonTree/HLTMuTree",openFile);
 
-	TLegend *leg = new TLegend(0.05,0.30,0.90,0.95);
+	//TLegend *leg = new TLegend(0.05,0.30,0.90,0.95);
+	TLegend *leg = new TLegend(0.05,0.45,0.90,0.95);
 	SetLegendStyle(leg);
 
 	for (Int_t i=0; i<nHist; i++) {
 	leg->AddEntry(hist1D[i],histName[i].c_str(),"lp");
   }
 
-  TCanvas c1;
-	c1.cd(); 
+  TCanvas* c1 = new c1();
+	c1->cd(); 
 	leg->Draw();
 	
-	c1.SaveAs("LEGEND_trigger.pdf");
+	c1->SaveAs("LEGEND_trigger_single_double.pdf");
 
 	return;
 }
@@ -71,7 +72,8 @@ void draw_LEGEND_trigger()
 void SetHistStyle(TH1* h, int i) {
 	//  int colorArr[6] = {kBlack, kBlue, kRed, kGreen+2, kOrange, kMagenta+2};
 	//  int colorArr[] = {kGray+2, kBlack, kRed, kRed+2, kOrange+1, kOrange+8, kGreen+2, kGreen+4, kAzure+1, kAzure+3, kViolet+5, kViolet+3, kMagenta, kMagenta+2};
-int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+//int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
+int colorArr[] = { kBlack, kGreen+2, kAzure+1, kViolet+5, kMagenta, kRed+1, kOrange+1, kBlue+2};
 int markerFullArr[6] = {kFullCircle, kFullSquare, kFullTriangleUp, kFullTriangleDown, kFullStar, kFullDiamond};
 int markerOpenArr[6] = {kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenTriangleDown, kOpenStar, kOpenDiamond};
 				  
@@ -92,6 +94,6 @@ void SetLegendStyle(TLegend* l) {
 //	l->SetFillStyle(4000); //transparent
 //	l->SetBorderSize(1);
 	l->SetBorderSize(0);
-	l->SetMargin(0.15);
+	l->SetMargin(0.1);
 }
 
