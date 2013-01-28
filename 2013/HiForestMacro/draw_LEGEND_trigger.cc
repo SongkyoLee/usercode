@@ -18,7 +18,7 @@ void SetLegendStyle(TLegend* l);
 void draw_LEGEND_trigger()
 {
 	//Set style
-	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/styleTH1D.C"); 
+	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_ExpressHist/styleTH1D.C"); 
 
 	//draw histograms
 	string histName[] ={
