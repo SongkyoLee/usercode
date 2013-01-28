@@ -16,7 +16,7 @@ using namespace std;
 void draw_TH2D_manyRuns()
 {
 	//Set style
-	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/styleTH2D.C"); 
+	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_ExpressHist/styleTH2D.C"); 
 
 	//Variables
 //	Int_t Run, Event;

@@ -18,14 +18,14 @@ void SetLegendStyle(TLegend* l);
 void draw_TH1D_manyRuns()
 {
 	// Set style
-	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/styleTH1D.C"); 
+	gROOT->Macro("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_ExpressHist/styleTH1D.C"); 
 
 	// ----- open the root file ------
 	// 1.open reference file (created from pilot run 202792)
 	//root://eoscms//eos/cms/store/caf/user/velicanu/PA2013_merged/PA2013_HiForest_Express_r0_pilot_minbias_v0.root"
-	TFile *refFile = new TFile("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_SimpleHist/stableBeam/pilotRun/TH1D/TH1D_run202792.root","READ");
+	TFile *refFile = new TFile("/afs/cern.ch/user/k/kyolee/private/cms538HI_test/src/01_ExpressHist/stableBeam/pilotRun/TH1D/TH1D_run202792.root","READ");
 	// 2.open run root file 
-	Int_t nRun = 8; //num of run root files
+	Int_t nRun = 14; //num of run root files
 	TFile *openFile[nRun];
 	openFile[0] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210498_autoforest_v51.root");
 	openFile[1] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210534_autoforest_v51.root");
@@ -37,6 +37,12 @@ void draw_TH1D_manyRuns()
 	openFile[7] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210676_autoforest_v51.root");
 	// propmt RECO : incorrect! not muon! 
 	//openFile[8] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_PromptRecofirstPR_forestv51.root");
+	openFile[8] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210737_autoforest_v51.root");
+	openFile[9] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210738_autoforest_v51.root");
+	openFile[10] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210759_autoforest_v51.root");
+	openFile[11] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210818_autoforest_v51.root");
+	openFile[12] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210837_autoforest_v51.root");
+	openFile[13] = TFile::Open("root://eoscms//eos/cms/store/group/phys_heavyions/velicanu/forest/PA2013_HiForest_Express_r210855_autoforest_v51.root");
 
 
 	// Draw histograms
@@ -61,8 +67,8 @@ void draw_TH1D_manyRuns()
 		"Sta_dz;Standalone muon dz [cm];Counts (normalized by # of entries)"
 	}; 
 	int nBins[] ={50, 50, 50, 50, 50, 55, 31, 31, 6, 50, 50, 50, 50, 50, 50, 50, 50};
-	double xMin[] ={0., -2.5, -3.4, -15.0, -80., 0., 0., 0., 0., 0., 0., 0., 0., -2.5,-3.4, -10., -400. };
-	double xMax[] ={20., 2.5, 3.4, 15.0, 80., 50., 31., 31., 6., 5., 3., 1., 50., 2.5, 3.4, 10., 400. };
+	double xMin[] ={0., -2.4, -3.14, -15.0, -80., 0., 0., 0., 0., 0., 0., 0., 0., -2.4,-3.14, -10., -400. };
+	double xMax[] ={20., 2.4, 3.14, 15.0, 80., 50., 31., 31., 6., 5., 3., 1., 50., 2.4, 3.14, 10., 400. };
 
 	const int nHist = sizeof(histName)/sizeof(string);
 	cout<< "nHist = " << nHist << endl;
@@ -87,7 +93,7 @@ void draw_TH1D_manyRuns()
 
 		for (Int_t i=0; i<nHist; i++) {
 			histRef[i] = (TH1D*)refFile-> Get(histName[i].c_str());
-			histRef[i]->Sumw2();
+			//histRef[i]->Sumw2();
 			SetHistStyle(histRef[i],0);
 			hist1Dname[k][i] << k << "_" << histName[i].c_str() ;
 			//cout << k <<" : "<< histName[i].c_str()<<" : "<<hist1Dname[k][i].str().c_str() << endl;
@@ -97,19 +103,23 @@ void draw_TH1D_manyRuns()
 		}
 	}
 
-	TLegend *leg = new TLegend(0.68,0.54,0.92,0.90);
+	TLegend *leg = new TLegend(0.48,0.54,0.92,0.90);
 	SetLegendStyle(leg);
-	TLegend *leg_top_left = new TLegend(0.20, 0.51 ,0.49, 0.90);
+	leg->SetNColumns(2);
+	TLegend *leg_top_left = new TLegend(0.20, 0.51 ,0.59, 0.90);
 	SetLegendStyle(leg_top_left);
-	TLegend *leg_top_middle = new TLegend(0.40, 0.45 ,0.70, 0.90);
+	leg_top_left->SetNColumns(2);
+	TLegend *leg_top_middle = new TLegend(0.33, 0.42 ,0.80, 0.90);
 	SetLegendStyle(leg_top_middle);
-	leg_top_middle->SetTextSize(0.06);
-	TLegend *leg_middle = new TLegend(0.67, 0.39, 0.92, 0.71);
+	leg_top_middle->SetTextSize(0.050); // Force Style
+	leg_top_middle->SetNColumns(2);
+	TLegend *leg_middle = new TLegend(0.67, 0.29, 0.92, 0.81);
 	SetLegendStyle(leg_middle);
-	TLegend *leg_big = new TLegend(0.62, 0.43,0.92, 0.90);
+	TLegend *leg_big = new TLegend(0.52, 0.43, 0.92, 0.90);
+	//TLegend *leg_big = new TLegend(0.62, 0.43,0.92, 0.90);
 	SetLegendStyle(leg_big);
 	leg_big->SetTextSize(0.045); // Force Style
-
+	leg_big->SetNColumns(2);
 	leg->AddEntry(histRef[0],"pilotRun","lp");
 	leg_top_left->AddEntry(histRef[0],"pilotRun","lp");
 	leg_top_middle->AddEntry(histRef[0],"pilotRun","lp");
@@ -503,11 +513,23 @@ void SetHistStyle(TH1* h, int i) {
 //int colorArr[] = { kBlack, kRed+1, kOrange+1, kOrange-8, kGreen+2, kAzure+1, kBlue+2, kViolet+5, kViolet-4, kMagenta, kMagenta+2};
 	int markerFullArr[6] = {kFullCircle, kFullSquare, kFullTriangleUp, kFullTriangleDown, kFullStar, kFullDiamond};
 	int markerOpenArr[6] = {kOpenCircle, kOpenSquare, kOpenTriangleUp, kOpenTriangleDown, kOpenStar, kOpenDiamond};
+	
+	if (i<10) { 
+		h->SetLineColor(colorArr[i]);
+		h->SetMarkerColor(colorArr[i]);
+		if (i<2)	h->SetMarkerStyle(markerFullArr[i+2]);
+		else h->SetMarkerStyle(markerOpenArr[0]);
+	}
+	else {
+		h->SetLineColor(colorArr[i-10]);
+		h->SetMarkerColor(colorArr[i-10]);
+		h->SetMarkerStyle(markerFullArr[0]);
+	}
 				  
-	h->SetLineColor(colorArr[i]);
+	//h->SetLineColor(colorArr[i]);
 	//h->SetLineWidth(2.4);
-	h->SetMarkerColor(colorArr[i]);
-	h->SetMarkerStyle(kFullCircle);
+	//h->SetMarkerColor(colorArr[i]);
+	//	h->SetMarkerStyle(kFullCircle);
 	//if (i < 10)  h->SetMarkerStyle(markerFullArr[i]);
 	//else h->SetMarkerStyle(markerOpenArr[i-10]);
 	h->SetMarkerSize(1.2);
