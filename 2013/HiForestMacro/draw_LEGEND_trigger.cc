@@ -84,7 +84,7 @@ void SetHistStyle(TH1* h, int i) {
 
 void SetLegendStyle(TLegend* l) {
  	l->SetFillColor(0);
-	l->SetFillStyle(4100);
+	l->SetFillStyle(4000);
 //	l->SetFillStyle(4000); //transparent
 //	l->SetBorderSize(1);
 	l->SetBorderSize(0);
