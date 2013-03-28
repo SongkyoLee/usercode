@@ -42,6 +42,8 @@ for prefix in ${prefixarr[@]}; do
   fi
 
 #for Pbp : 7, 8, 78, 9, 0
+#for pPb : 7, 10, 710, 11, 0
+
   if [ "$prefix" == "${prefixarr[0]}" ]; then
     echo "runType == 7"
     for label in ${labelarr[@]}; do
@@ -68,34 +70,6 @@ for prefix in ${prefixarr[@]}; do
       ./Tree2Datasets =t $label =or 0 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
     done
   fi
-
-#for pPb : 7, 10, 710, 11, 0
-#  if [ "$prefix" == "${prefixarr[0]}" ]; then
-#    echo "runType == 7"
-#    for label in ${labelarr[@]}; do
-#      ./Tree2Datasets =t $label =or 7 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
-#    done
-#  elif [ "$prefix" == "${prefixarr[1]}" ]; then
-#    echo "runType == 10"
-#    for label in ${labelarr[@]}; do
-#      ./Tree2Datasets =t $label =or 10 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
-#    done
-#  elif [ "$prefix" == "${prefixarr[2]}" ]; then
-#    echo "runType == 710"
-#    for label in ${labelarr[@]}; do
-#      ./Tree2Datasets =t $label =or 710 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
-#    done
-#  elif [ "$prefix" == "${prefixarr[3]}" ]; then
-#    echo "runType == 11"
-#    for label in ${labelarr[@]}; do
-#      ./Tree2Datasets =t $label =or 11 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
-#    done
-#  elif [ "$prefix" == "${prefixarr[4]}" ]; then
-#    echo "runType == 0"
-#    for label in ${labelarr[@]}; do
-#      ./Tree2Datasets =t $label =or 0 =oc 0 =f $inputf $outputf/$prefix/cent$label >& $outputf/$prefix/log_cent$label &
-#    done
-#  fi
 
 done
 
