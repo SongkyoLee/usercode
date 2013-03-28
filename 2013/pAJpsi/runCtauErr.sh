@@ -6,19 +6,19 @@ eval `scramv1 runtime -sh`
 
 #datasetarr=(datasets)
 # Pb+p
-datasetarr=(/afs/cern.ch/user/k/kyolee/private/cms442/src/pAJpsi/outRooData_Pbp/)
+#datasetarr=(/afs/cern.ch/user/k/kyolee/private/cms442/src/pAJpsi/outRooData_Pbp/)
 # p+Pb
-#datasetarr=(/afs/cern.ch/user/k/kyolee/private/cms442/src/pAJpsi/outRooData_pPb/)
+datasetarr=(/afs/cern.ch/user/k/kyolee/private/cms442/src/pAJpsi/outRooData_pPb/)
 
 #prefixarr=(default_bit1 default_bit1_singleMuEtaAll default_bit1_singleMuEtaAllMu4GeV default_bit1_singleMuEtaBarrel default_bit1_mu4GeV)
 prefixarr=(mu4GeV_bit1 singleMuEtaAll_bit1 singleMuEtaAllMu4GeV_bit1 singleMuEtaBarrel_bit1 default_bit1)
 
 #raparr=(-2.4-1.46 -2.4--0.47 -0.47-1.46 -2.4--1.757 -1.757--1.113 -1.113--0.47 -0.47-0.173 0.173-0.817 0.817-1.46 1.46-1.93 1.93-2.4 1.46-2.4 -1.47-1.46 -1.47-0.53)
 # Pb+p (18.38/nb)
-raparr=(-2.4--1.47 -1.47--0.47 -0.47-0.53 0.53-1.47 1.47-2.4 -2.4--0.47 -0.47-1.47 -1.47-0.53)
+#raparr=(-2.4--1.47 -1.47--0.47 -0.47-0.53 0.53-1.47 1.47-2.4 -2.4--0.47 -0.47-1.47 -1.47-0.53)
 #raparr=(-1.47-0.53)
 # p+Pb (12.55/nb)
-#raparr=(-2.4--1.47 -1.47--0.53 -0.53-0.47 0.47-1.47 1.47-2.4 -1.47-0.47 0.47-2.4 -0.53-1.47)
+raparr=(-2.4--1.47 -1.47--0.53 -0.53-0.47 0.47-1.47 1.47-2.4 -1.47-0.47 0.47-2.4 -0.53-1.47)
 
 for dataset in ${datasetarr[@]}; do
   for prefix in ${prefixarr[@]}; do
