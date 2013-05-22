@@ -7,7 +7,10 @@ indir_="$(pwd)/Results/"
 ########## Directory where python & root scripts are located
 workdir="/afs/cern.ch/user/k/kyolee/private/cms442/src/pAJpsi/"
 ########## Prefix of jobs
-prefixarr=(pPb_singleMuEtaAll_bit1 Pbp_singleMuEtaAll_bit1)
+# for Pbp and pPb
+#prefixarr=(pPb_singleMuEtaAll_bit1 Pbp_singleMuEtaAll_bit1)
+# for pp
+prefixarr=(pp_singleMuEtaAll_bit1)
 
 ############################################################
 eval `scramv1 runtime -csh`
