@@ -46,8 +46,11 @@ static bool randChoice = true; //Only valid trigType == 5, true: randx > 0.5, fa
 //6: various single muon cuts for both single muons
 //7: both single mu pT > 4
 //8: -2.4 < both single mu eta < 1.47 // KYO for Pbp
-//9: -1.47 < both single mu eta < 0.53
+//9: -1.47 < both single mu eta < 0.53 -mid rap
 //10: -1.47 < both single mu eta < 2.4 // KYO for pPb
+//11: -0.53 < both single mu eta < 1.47 - mid rap
+//12: -1.93 < both single mu eta < 1.93 // KYO for pp
+//13: -1.00 < both single mu eta < 1.00 - mid rap
 static int runType = 0;
 
 //0 : DO NOT weight, 1: Apply weight
@@ -107,8 +110,8 @@ int main(int argc, char* argv[]) {
   if (argc == 1) {
     cout << "====================================================================\n";
     cout << "Use the program with this commend:" << endl;
-    cout << "./Tree2Datasets =t [centrality array] =s [dPhi array] =op [RP number] =ot [trigType] =or [runType] =w [Weighting] =f [input TTree file] [output directory]" << endl;
-    cout << "./Tree2Datasets =t 5 =s 4 =op -1 =ot 3 =or 0 =w 0 =f /tmp/miheejo/mini_Jpsi_Histos_may202012_m25gev.root ." << endl;
+    cout << "./Tree2Datasets =t [centrality array] =s [dPhi array] =op [RP number] =ot [trigType] =or [runType] =oc [checkRPNUM] =w [Weighting] =e [startEvent] [endEvent] =f [input TTree file] [output directory]" << endl;
+    cout << "./Tree2Datasets =t 5 =s 1 =op -1 =ot 3 =or 0 =oc 0 =w 0 =e 0 -1 =f /tmp/miheejo/mini_Jpsi_Histos_may202012_m25gev.root ." << endl;
     cout << "====================================================================\n";
     return 0;
   }
@@ -179,7 +182,8 @@ int main(int argc, char* argv[]) {
   int cent805Arr[] = {0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,80,100};
   int cent901235Arr[] = {0,1,2,4,6,8,10,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,65,70,75,80,90,100};
   
-  int cent1Arr[] = {0,1}; //pp
+//  int cent1Arr[] = {0,1}; //pp
+  int cent1Arr[] = {0,100}; //pp
   vector<int> centLimits;
 
   // dPhi array: at least 3 element is necessary for each array!
@@ -1152,6 +1156,18 @@ bool checkRunType(const struct Condition Jpsi, const TLorentzVector* m1P, const 
   }
   else if (runType == 711) {
     if ((m1P->Eta() > -0.53 && m2P->Eta() > -0.53 && m1P->Eta() < 1.47 && m2P->Eta() < 1.47) && (m1P->Pt() > 4.0 && m2P->Pt() > 4.0)) return true;
+    else return false;
+  }
+  else if (runType == 12) {
+    if (m1P->Eta() > -1.93 && m2P->Eta() > -1.93 && m1P->Eta() < 1.93 && m2P->Eta() < 1.93) return true;
+    else return false;
+  }
+  else if (runType == 712) {
+    if ((m1P->Eta() > -1.93 && m2P->Eta() > -1.93 && m1P->Eta() < 1.93 && m2P->Eta() < 1.93) && (m1P->Pt() > 4.0 && m2P->Pt() > 4.0)) return true;
+    else return false;
+  }
+  else if (runType == 13) {
+    if (m1P->Eta() > -1.00 && m2P->Eta() > -1.00 && m1P->Eta() < 1.00 && m2P->Eta() < 1.00) return true;
     else return false;
   }
 
