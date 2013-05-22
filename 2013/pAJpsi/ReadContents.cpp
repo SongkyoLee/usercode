@@ -13,36 +13,38 @@ using namespace std;
 // Define which y, pT, cent bins are going to be used
 // The order of elements will be kept in the final results!
 
-// pPb
+// for Pbp
 //static string str_rap[] = {"-2.4--0.47","-0.47-1.46"};
 //static string str_rap[] = {"-2.4--0.47"};
 //static string str_rap[] = {"-0.47-1.46"};
 //static string str_rap[] = {"-2.4--1.757","-1.757--1.113","-1.113--0.47","-0.47-0.173","0.173-0.817","0.817-1.46"};
-//static string str_rap[] = {"-1.47-0.47"}; // KYO backwards
-//static string str_rap[] = {"0.47-2.4"}; // KYO forwards
-
-//static string str_pt[] = {"0.0-3.0","3.0-5.0","5.0-6.5","6.5-8.0","8.0-10.0","10.0-13.0","13.0-30.0"};
+//static string str_rap[] = {"-2.4--0.47","-0.47-1.47"}; // KYO backwards forwards
+//static string str_rap[] = {"-2.4--1.47","-1.47--0.47","-0.47-0.53","0.53-1.47"}; // KYO
 
 
-// Pbp
+// for pPb
 //static string str_rap[] = {"0.47-2.4","-1.46-0.47"};
 //static string str_rap[] = {"0.47-2.4"};
 //static string str_rap[] = {"-1.46-0.47"};
 //static string str_rap[] = {"1.757-2.4","1.113-1.757","0.47-1.113","-0.173-0.47","-0.817--0.173","-1.46--0.817"};
+//static string str_rap[] = {"0.47-2.4","-1.47-0.47"}; //KYO backwards forwards
+//static string str_rap[] = {"1.47-2.4","0.47-1.47","-0.53-0.47","-1.47--0.53"}; //KYO
 
-//static string str_rap[] = {"-2.4--0.47"}; // KYO backwards
-//static string str_rap[] = {"-0.47-1.47"}; // KYO forwards
-static string str_rap[] = {"-2.4--0.47","-0.47-1.47"}; // KYO
+// for pp
+//static string str_rap[] = {"-1.93-0.00","0.00-1.93"}; // KYO backwards forwards
+static string str_rap[] = {"-1.93--1.00","-1.00-0.00","0.00-1.00","1.00-1.93"}; // KYO backwards forwards
+
 
 //static string str_pt[] = {"0.0-3.0","3.0-5.0","5.0-6.5","6.5-8.0","8.0-10.0","10.0-13.0","13.0-30.0"};
 //static string str_pt[] = {"0.0-6.5","6.5-10.0","10.0-30.0"};
 //static string str_pt[] = {"6.5-30.0"};
-static string str_pt[] = {"0.0-6.5","6.5-30.0"}; //KYO
+//static string str_pt[] = {"0.0-6.5","6.5-30.0"}; //KYO
+static string str_pt[] = {"6.5-10.0","10.0-30.0"}; //KYO
 
 //static string str_cent[] = {"50-100", "30-50", "10-30", "0-10"};
-//static string str_cent[] = {"0-100"};
+static string str_cent[] = {"0-100"}; // also for pp
 //static string str_cent[] = {"80-100", "70-80", "60-70", "50-60", "40-50", "30-40", "20-30", "10-20", "0-10"}; //KYO
-static string str_cent[] = {"70-100", "60-70", "50-60", "40-50", "30-40", "20-30", "10-20", "0-10"}; //KYO temporary
+//static string str_cent[] = {"70-100", "60-70", "50-60", "40-50", "30-40", "20-30", "10-20", "0-10"}; //KYO temporary
 
 static std::vector<string> rapidity(str_rap,str_rap+sizeof(str_rap)/sizeof(string));
 static std::vector<string> pt(str_pt,str_pt+sizeof(str_pt)/sizeof(string));

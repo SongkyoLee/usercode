@@ -31,12 +31,13 @@ void Rcp_cent()
 	gROOT->Macro("/home/songkyo/kyo/2013/03_Jpsi/JpsiStyle.C");
 
 	//read the fit_table ASCII file
-	std::ifstream inFile("fit_table_2pt",std::ios::in);
+	std::ifstream inFile("fit_table_coarser",std::ios::in);
 
 	string rapArr[] = {"-2.4--0.47", "-0.47-1.47"};
 	string ptArr[] = {"0.0-6.5", "6.5-30.0"};
-	string centArr[] = {"70-100", "60-70", "50-60", "40-50", "30-40", "20-30", "10-20", "0-10"};
-//	Double_t xaxis[] = {5, 15, 25, 35, 45, 55, 65, 85}; // temporary		
+//	string centArr[] = {"70-100", "60-70", "50-60", "40-50", "30-40", "20-30", "10-20", "0-10"};
+//	string centArr[] = {"50-100", "30-50", "10-30", "0-10"};
+	string centArr[] = {"50-100", "40-50", "30-40", "20-30", "10-20", "0-10"};
 
 	const Int_t nRap = sizeof(rapArr)/sizeof(string);
 	const Int_t nPt = sizeof(ptArr)/sizeof(string);
@@ -76,8 +77,13 @@ for (Int_t k=0; k<nRap; k++) {
 	//draw the reference graph y=1
 	Double_t x[]={0., 100.};
 	Double_t y[]={1., 1.};
+//	Double_t y[nCent];
+//	for (Int_t i=0; i<nCent; i++) {
+//		y[i]=1.;
+//	}
   const Int_t n = sizeof(x)/sizeof(double);
 	TGraph* gr_ref = new TGraph(n, x, y);
+//	TGraph* gr_ref = new TGraph(nCent, xaxis, y);
 	gr_ref->SetLineColor(kBlack);
 
 	//draw the Legend
@@ -116,7 +122,7 @@ for (Int_t k=0; k<nRap; k++) {
 			leg->Draw();
 			text->AddText("Pbp (18.4/nb)");
 //			text->AddText("pPb (12.6/nb)");
-			text->AddText(Form("#eta : %s",rapArr[k].c_str()));
+			text->AddText(Form("y : %s",rapArr[k].c_str()));
 			text->AddText(Form("p_{T} : %s GeV/c",ptArr[j].c_str()));
 			text->Draw();
 			for(Int_t i=0; i<nCent; i++) {
@@ -126,7 +132,7 @@ for (Int_t k=0; k<nRap; k++) {
 					rcp_inclusive[k][j]->GetXaxis()->SetBinLabel(i+1,xLabel);
 			}
 			c1->Update();
-			c1->SaveAs(Form("Rcp_cent_%s_%s.pdf",rapArr[k].c_str(),ptArr[j].c_str()));
+			c1->SaveAs(Form("Rcp_cent_coarser_%s_%s.pdf",rapArr[k].c_str(),ptArr[j].c_str()));
 			leg->Clear();
 			text->Clear();
 			c1->Clear();
