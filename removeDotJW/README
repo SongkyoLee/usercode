@@ -1,0 +1,10 @@
+< How to use writeScript.py >
+
+1. make a list of files you want to remove points.
+2. run python script "writeScript.py"
+3. run shell script "removePoints.sh"
+
+ex)
+	$ ls Pbp* >> list 
+	$ python writeScript.py list
+	$ sh removePoints.sh
