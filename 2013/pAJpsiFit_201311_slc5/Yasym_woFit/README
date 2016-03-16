@@ -1,0 +1,21 @@
+
+************************* KYO files from eos ************************
+* view the list :  eos ls /store/...
+* copy the file : 
+*		xrdcp root://eoscms//eos/cms/store/... .
+*		xrd eoscms cp /eos/cms/store/... /eos/cms/store/...
+* common case :
+    cp /afs/cen.ch/work/m/miheejo/public/...
+*********************************************************************
+
+02. [Jpsi_Histos_Runs_210498-211256.root] //removed!
+ - Pbp 18.4nb^-1 TTree
+root://eoscms//eos/cms//store/group/phys_heavyions/dileptons/Data2013/pPb/Prompt/TTrees/CentralSkims/Jpsi_Histos_Runs_210498-211256.root
+
+03. [Jpsi_Histos_Runs_211313-211631.root] //removed!
+ - pPb 12.6nb^-1 TTree
+root://eoscms//eos/cms//store/group/phys_heavyions/dileptons/Data2013/pPb/Prompt/TTrees/CentralSkims/Jpsi_Histos_Runs_211313-211631.root
+
+05. [All_v2.24_Histos_Runs_211739-211831_woPileUpRej_muLessPV.root]
+- pp 2.76TeV TTree (170713 from Mihee)
+root://eoscms//eos/cms//store/group/phys_heavyions/dileptons/Data2013/pp/Prompt/TTrees/All_v2.24_Histos_Runs_211739-211831_woPileUpRej_muLessPV.root

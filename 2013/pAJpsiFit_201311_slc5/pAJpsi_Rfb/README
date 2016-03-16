@@ -1,0 +1,25 @@
+
+************************* How to compile and run ************************
+*************************************************************************
+
+01. extract.py
+ - needed
+
+02. ReadContents.cpp
+ - different rapidity bins for Pbp, pPb and pp. (from Forward to Backward)
+ - complie : g++ ReadContents.cpp
+ - executable created : a.out 
+
+03. a.out
+./a.out [fit_table_from] [fit_table_to]
+ - e.g.)
+ - ./a.out ../pAJpsi/Results/tmp_Pbp_sglMuEtaFiner/summary/fit_table fit_table_Pbp_yDep 
+ - ./a.out ../pAJpsi/Results/tmp_pPb_sglMuEtaFiner/summary/fit_table fit_table_pPb_yDep 
+ - fit_table_from /afs/cern.ch/work/k/kyolee/private/cms442/src/pAJpsi/Results
+
+04. draw_Rfb_yDep.cc
+ - rlq draw_Rfb_yDep.cc+ >&log_draw_Rfb_yDep&
+
+05. draw_Rfb_ptDep.cc
+ - rlq draw_Rfb_ptDep.cc+ >&log_draw_Rfb_ptDep&
+
